@@ -154,6 +154,13 @@ class TestDataCleaner(unittest.TestCase):
         - Verificar que el valor extremo (120) fue eliminado del resultado (usar self.assertNotIn para verificar que 120 no está en los valores de la columna)
         - Verificar que al menos uno de los valores no extremos (25 o 35) permanece en el resultado (usar self.assertIn para verificar que está presente)
         """
+        df = make_sample_df()
+        cleaner = DataCleaner()
+        result = cleaner.remove_outliers_iqr(df, "age", 0.5)
+
+        self.assertNotIn(120, result["age"].to_list())
+        self.assertIn(25, result["age"].to_list())
+        self.assertIn(35, result["age"].to_list())
 
     def test_remove_outliers_iqr_raises_keyerror_for_missing_column(self):
         """Test que verifica que el método remove_outliers_iqr lanza un KeyError cuando
